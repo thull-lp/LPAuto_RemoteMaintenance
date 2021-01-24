@@ -4,7 +4,6 @@ $Password = "f3KknnU#w}"
 
 # Configure Variables - Set API, New WebRequestSession
 $APIURL = "https://ncentral.logicplus.com.au/dms2/services2/ServerEI2?wsdl"
-$Session = New-Object Microsoft.PowerShell.Commands.WebRequestSession
 
 # Set Customer ID
 $CustomerID = 50
@@ -76,4 +75,4 @@ $ReadableIssues = ForEach ($Line in $Issues){
 }
 
 # Filter 
-$ReadableIssues | Where-Object {$_.notifstate -ne "Disabled"} | FT customername, sitename, deviceclass, devicename, servicename, notifstate -AutoSize
+$ReadableIssues | Where-Object {$_.notifstate -ne "Disabled"} | Format-Table customername, sitename, deviceclass, devicename, servicename, notifstate -AutoSize
