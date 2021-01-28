@@ -12,6 +12,10 @@ Firmware
 
 Remote Monthly Maintenance (RMM Checks)
     Difficulty: Low-Medium
+        Active Issues via API.
+        Device List via API.
+        Probes do not seem to report in NCentral - e.g. CW Products - CWP, CWP-SBS (192.168.1.10) is the probe, but isprobe is reporting false.
+        Overall API seems bad, discussed with Craig, might look at querying the SQL.
 
 Hypervisor
     Difficulty: Low-Medium
