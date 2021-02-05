@@ -164,3 +164,5 @@ If ($Null -ne $FirstRun) {
     $ADReport | Export-Csv "$ReportPath\Maintenance-ADCheck-$ReportDateStamp.csv" -NoTypeInformation
 }
 
+$Output = $ADReport | ForEach-Object {"$($_.DisplayName) - $($_.BreachReason)"}
+$OutputCount = $Output.Count
