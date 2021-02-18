@@ -42,33 +42,33 @@ $Issues = $([XML]$ActiveIssues.Content).Envelope.Body.activeIssuesListResponse.r
 # Create PowerShell Custom Object - for ease of use.
 $ReadableIssues = ForEach ($Line in $Issues){
     $Properties = @{
-        socustomername = $Line.items.value[0]
-        customername = $Line.items.value[1]
-        sitename = $Line.items.value[2]
-        customerid = $Line.items.value[3]
-        socustomerid = $Line.items.value[4]
-        deviceid = $Line.items.value[5]
-        devicename = $Line.items.value[6]
-        deviceclass = $Line.items.value[7]
-        licensemode = $Line.items.value[8]
-        isremotecontrollable = $Line.items.value[9]
-        notifstate = Switch($Line.items.value[10]) {"4" {"Warning"} "5" {"Failed"} "6" {"Misconfigured"} "7" {"Disconnected"} "8" {"Disabled"}}
-        servicename = $Line.items.value[11]
-        serviceid = $Line.items.value[12]
-        taskid = $Line.items.value[13]
-        taskident = $Line.items.value[14]
-        transitiontime = $Line.items.value[15]
-        ispartofnotification = $Line.items.value[16]
-        numberofactivenotification = $Line.items.value[17]
-        numberofacknowledgednotification = $Line.items.value[18]
-        serviceitemid = $Line.items.value[19]
-        isremotecontrolconnected = $Line.items.value[20]
-        psaintegrationexists = $Line.items.value[21]
-        psaticketdetails = $Line.items.value[22]
+        socustomername = ($Line.items | Where-Object {$_.key -eq 'activeissue.socustomername'}).value
+        customername = ($Line.items | Where-Object {$_.key -eq 'activeissue.customername'}).value
+        sitename = ($Line.items | Where-Object {$_.key -eq 'activeissue.SITE_NAME'}).value
+        customerid = ($Line.items | Where-Object {$_.key -eq 'activeissue.customerid'}).value
+        socustomerid = ($Line.items | Where-Object {$_.key -eq 'activeissue.socustomerid'}).value
+        deviceid = ($Line.items | Where-Object {$_.key -eq 'activeissue.deviceid'}).value
+        devicename = ($Line.items | Where-Object {$_.key -eq 'activeissue.devicename'}).value
+        deviceclass = ($Line.items | Where-Object {$_.key -eq 'activeissue.deviceclass'}).value
+        licensemode = ($Line.items | Where-Object {$_.key -eq 'activeissue.licensemode'}).value
+        isremotecontrollable = ($Line.items | Where-Object {$_.key -eq 'activeissue.isremotecontrollable'}).value
+        notifstate = Switch(($Line.items | Where-Object {$_.key -eq 'activeissue.notifstate'}).value) {"0" {"No State"} "1" {"No Data"} "2" {"Stale"} "3" {"Normal"} "4" {"Warning"} "5" {"Failed"} "6" {"Misconfigured"} "7" {"Disconnected"}}
+        servicename = ($Line.items | Where-Object {$_.key -eq 'activeissue.servicename'}).value
+        serviceid = ($Line.items | Where-Object {$_.key -eq 'activeissue.serviceid'}).value
+        taskid = ($Line.items | Where-Object {$_.key -eq 'activeissue.taskid'}).value
+        taskident = ($Line.items | Where-Object {$_.key -eq 'activeissue.taskident'}).value
+        transitiontime = ($Line.items | Where-Object {$_.key -eq 'activeissue.transitiontime'}).value
+        ispartofnotification = ($Line.items | Where-Object {$_.key -eq 'activeissue.ispartofnotification'}).value
+        numberofactivenotification = ($Line.items | Where-Object {$_.key -eq 'activeissue.numberofactivenotification'}).value
+        numberofacknowledgednotification = ($Line.items | Where-Object {$_.key -eq 'activeissue.numberofacknowledgednotification'}).value
+        serviceitemid = ($Line.items | Where-Object {$_.key -eq 'activeissue.serviceitemid'}).value
+        isremotecontrolconnected = ($Line.items | Where-Object {$_.key -eq 'activeissue.isremotecontrolconnected'}).value
+        psaintegrationexists = ($Line.items | Where-Object {$_.key -eq 'activeissue.psaintegrationexists'}).value
+        psaticketdetails = ($Line.items | Where-Object {$_.key -eq 'activeissue.psaticketdetails'}).value
     }
 
     New-Object -TypeName PSCustomObject -Property $Properties
 }
 
 # Filter 
-$ReadableIssues | Where-Object {$_.notifstate -ne "Disabled"} | Format-Table customername, sitename, deviceclass, devicename, servicename, notifstate -AutoSize
+$ReadableIssues | Where-Object {$_.notifstate -ne "Disabled"} | Format-Table customername, sitename, deviceclass, devicename, servicename, taskident, notifstate -AutoSize
