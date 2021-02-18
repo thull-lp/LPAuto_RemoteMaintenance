@@ -21,10 +21,6 @@ $SOAPBody = @"
          <!--Zero or more repetitions:-->
          <ei2:settings>
             <!--Optional:-->
-            <ei2:first></ei2:first>
-            <!--Optional:-->
-            <ei2:second></ei2:second>
-            <!--Optional:-->
             <ei2:key>customerID</ei2:key>
             <!--Optional:-->
             <ei2:value>$CustomerID</ei2:value>
@@ -46,29 +42,29 @@ $Issues = $([XML]$ActiveIssues.Content).Envelope.Body.activeIssuesListResponse.r
 # Create PowerShell Custom Object - for ease of use.
 $ReadableIssues = ForEach ($Line in $Issues){
     $Properties = @{
-        socustomername = $Line.issue.value[0]
-        customername = $Line.issue.value[1]
-        sitename = $Line.issue.value[2]
-        customerid = $Line.issue.value[3]
-        socustomerid = $Line.issue.value[4]
-        deviceid = $Line.issue.value[5]
-        devicename = $Line.issue.value[6]
-        deviceclass = $Line.issue.value[7]
-        licensemode = $Line.issue.value[8]
-        isremotecontrollable = $Line.issue.value[9]
-        notifstate = Switch($Line.issue.value[10]) {"4" {"Warning"} "5" {"Failed"} "6" {"Misconfigured"} "7" {"Disconnected"} "8" {"Disabled"}}
-        servicename = $Line.issue.value[11]
-        serviceid = $Line.issue.value[12]
-        taskid = $Line.issue.value[13]
-        taskident = $Line.issue.value[14]
-        transitiontime = $Line.issue.value[15]
-        ispartofnotification = $Line.issue.value[16]
-        numberofactivenotification = $Line.issue.value[17]
-        numberofacknowledgednotification = $Line.issue.value[18]
-        serviceitemid = $Line.issue.value[19]
-        isremotecontrolconnected = $Line.issue.value[20]
-        psaintegrationexists = $Line.issue.value[21]
-        psaticketdetails = $Line.issue.value[22]
+        socustomername = $Line.items.value[0]
+        customername = $Line.items.value[1]
+        sitename = $Line.items.value[2]
+        customerid = $Line.items.value[3]
+        socustomerid = $Line.items.value[4]
+        deviceid = $Line.items.value[5]
+        devicename = $Line.items.value[6]
+        deviceclass = $Line.items.value[7]
+        licensemode = $Line.items.value[8]
+        isremotecontrollable = $Line.items.value[9]
+        notifstate = Switch($Line.items.value[10]) {"4" {"Warning"} "5" {"Failed"} "6" {"Misconfigured"} "7" {"Disconnected"} "8" {"Disabled"}}
+        servicename = $Line.items.value[11]
+        serviceid = $Line.items.value[12]
+        taskid = $Line.items.value[13]
+        taskident = $Line.items.value[14]
+        transitiontime = $Line.items.value[15]
+        ispartofnotification = $Line.items.value[16]
+        numberofactivenotification = $Line.items.value[17]
+        numberofacknowledgednotification = $Line.items.value[18]
+        serviceitemid = $Line.items.value[19]
+        isremotecontrolconnected = $Line.items.value[20]
+        psaintegrationexists = $Line.items.value[21]
+        psaticketdetails = $Line.items.value[22]
     }
 
     New-Object -TypeName PSCustomObject -Property $Properties
