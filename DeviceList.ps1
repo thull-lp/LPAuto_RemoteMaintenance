@@ -45,35 +45,40 @@ $Devices = $([XML]$DeviceList.Content).Envelope.Body.deviceListResponse.return
 
 # Create PowerShell Custom Object - for ease of use.
 $ReadableDevices = ForEach ($Line in $Devices){
-    $Properties = @{
-        deviceid = $Line.items.value[0]
-        uri = $Line.items.value[1].ToLower()
-        remotecontroluri = $Line.items.value[2]
-        sourceuri = $Line.items.value[3]
-        longname = $Line.items.value[4]
-        deviceclass = $Line.items.value[5]
-        description = $Line.items.value[6]
-        isprobe = $Line.items.value[7]
-        agentversion = $Line.items.value[8]
-        interfaceversion = $Line.items.value[9]
-        networkversion = $Line.items.value[10]
-        osid = $Line.items.value[11]
-        supportedos = $Line.items.value[12]
-        discoveredname = $Line.items.value[13].ToUpper()
-        statestatus = $Line.items.value[14]
-        deviceclasslabel = $Line.items.value[15]
-        supportedoslabel = $Line.items.value[16]
-        lastloggedinuser = $Line.items.value[17]
-        stillloggedin = $Line.items.value[18]
-        licensemode = $Line.items.value[19]
-        soname = $Line.items.value[20]
-        customername = $Line.items.value[21]
-        sitename = $Line.items.value[22]
+    Write-Progress -Activity "Putting Devices into PowerShell Custom Object..." -Status "Record $I of $($Devices.Count)" -PercentComplete (($I/$Devices.Count)*100)
+    If ($Testing -eq $True) {
+        For ($Keys = 0; $Keys -lt $Devices[$I].items.key.Count; $Keys++){
+            Write-Host "$($Devices[$I].items.key[$Keys]) = $($Devices[$I].items.value[$Keys])" -BackgroundColor Black -ForegroundColor Gray
+        }
     }
+    $Properties = @{
+        deviceid = ($Devices[$I].items | Where-Object {$_.key -eq 'device.deviceid'}).value
+        uri = ($Devices[$I].items | Where-Object {$_.key -eq 'device.uri'}).value.ToLower()
+        remotecontroluri = ($Devices[$I].items | Where-Object {$_.key -eq 'device.remotecontroluri'}).value
+        sourceuri = ($Devices[$I].items | Where-Object {$_.key -eq 'device.sourceuri'}).value
+        longname = ($Devices[$I].items | Where-Object {$_.key -eq 'device.longname'}).value
+        deviceclass = ($Devices[$I].items | Where-Object {$_.key -eq 'device.deviceclass'}).value
+        description = ($Devices[$I].items | Where-Object {$_.key -eq 'device.description'}).value
+        isprobe = ($Devices[$I].items | Where-Object {$_.key -eq 'device.isprobe'}).value
+        agentversion = ($Devices[$I].items | Where-Object {$_.key -eq 'device.agentversion'}).value
+        interfaceversion = ($Devices[$I].items | Where-Object {$_.key -eq 'device.interfaceversion'}).value
+        networkversion = ($Devices[$I].items | Where-Object {$_.key -eq 'device.networkversion'}).value
+        osid = ($Devices[$I].items | Where-Object {$_.key -eq 'device.osid'}).value
+        supportedos = ($Devices[$I].items | Where-Object {$_.key -eq 'device.supportedos'}).value
+        discoveredname = If ($Null -ne ($Devices[$I].items | Where-Object {$_.key -eq 'device.discoveredname'}).value) {($Devices[$I].items | Where-Object {$_.key -eq 'device.discoveredname'}).value.ToUpper()} Else {$Null}
+        statestatus = ($Devices[$I].items | Where-Object {$_.key -eq 'device.statestatus'}).value
+        deviceclasslabel = ($Devices[$I].items | Where-Object {$_.key -eq 'device.deviceclasslabel'}).value
+        supportedoslabel = ($Devices[$I].items | Where-Object {$_.key -eq 'device.supportedoslabel'}).value
+        lastloggedinuser = ($Devices[$I].items | Where-Object {$_.key -eq 'device.lastloggedinuser'}).value
+        stillloggedin = ($Devices[$I].items | Where-Object {$_.key -eq 'device.stillloggedin'}).value
+        licensemode = ($Devices[$I].items | Where-Object {$_.key -eq 'device.licensemode'}).value
+        soname = ($Devices[$I].items | Where-Object {$_.key -eq 'device.soname'}).value
+        customername = ($Devices[$I].items | Where-Object {$_.key -eq 'device.customername'}).value
+        sitename = If ($Devices[$I].items.key -contains 'device.sitename') {($Devices[$I].items | Where-Object {$_.key -eq 'device.sitename'} -ErrorAction Stop).value} Else {"---"}
+}
 
     New-Object -TypeName PSCustomObject -Property $Properties
 }
-
 
 # Filter 
 $ReadableDevices | Sort-Object sitename, deviceclass, discoveredname | Format-Table customername, sitename, deviceclass, discoveredname, uri, isprobe, statestatus -AutoSize
