@@ -31,3 +31,11 @@ Hardware Alerts
 
 Active Directory
     Difficulty: Very Low-Low
+
+
+Ansible/Unix
+    Network Configuration
+        Due to star network types of customers, how can we access and run scripts?
+    WSL (Windows Subsystem for Linux)
+    UTIL/ANSIBLE nodes on site
+    A lot of pre-written workbooks
